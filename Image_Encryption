@@ -1,0 +1,62 @@
+from PIL import Image
+import numpy as np
+
+def encrypt_image(image_path, output_path, key):
+    try:
+        # Open the image
+        image = Image.open(image_path)
+        image_array = np.array(image)
+
+        # Apply encryption by modifying pixel values
+        encrypted_array = (image_array + key) % 256
+
+        # Save the encrypted image
+        encrypted_image = Image.fromarray(np.uint8(encrypted_array))
+        encrypted_image.save(output_path)
+        print(f"Image encrypted successfully and saved as {output_path}")
+    except Exception as e:
+        print(f"Error during encryption: {e}")
+
+def decrypt_image(image_path, output_path, key):
+    try:
+        # Open the encrypted image
+        image = Image.open(image_path)
+        image_array = np.array(image)
+
+        # Apply decryption by reversing the encryption operation
+        decrypted_array = (image_array - key) % 256
+
+        # Save the decrypted image
+        decrypted_image = Image.fromarray(np.uint8(decrypted_array))
+        decrypted_image.save(output_path)
+        print(f"Image decrypted successfully and saved as {output_path}")
+    except Exception as e:
+        print(f"Error during decryption: {e}")
+
+def main():
+    print("Image Encryption Tool")
+    while True:
+        print("\nChoose an option:")
+        print("1. Encrypt an image")
+        print("2. Decrypt an image")
+        print("3. Exit")
+        choice = input("Enter your choice (1/2/3): ")
+
+        if choice == '1':
+            image_path = input("Enter the path to the image to encrypt: ")
+            output_path = input("Enter the path to save the encrypted image: ")
+            key = int(input("Enter the encryption key (integer): "))
+            encrypt_image(image_path, output_path, key)
+        elif choice == '2':
+            image_path = input("Enter the path to the encrypted image: ")
+            output_path = input("Enter the path to save the decrypted image: ")
+            key = int(input("Enter the decryption key (integer): "))
+            decrypt_image(image_path, output_path, key)
+        elif choice == '3':
+            print("Exiting the program. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
